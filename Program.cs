@@ -1,19 +1,18 @@
-﻿using System.Globalization;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using ProtoBuf;
+using System.Globalization;
 
 public class Program
 {
+    [ProtoContract]
     public class CompDatabaseEntry
     {
-        [JsonPropertyName("wikiId")]
+        [ProtoMember(1)]
         public int WikiId { get; set; }
-        [JsonPropertyName("chineseName")]
+        [ProtoMember(2)]
         public string ChineseName { get; set; }
-        [JsonPropertyName("curseforgeSlug")]
+        [ProtoMember(3)]
         public string? CurseForgeSlug { get; set; }
-        [JsonPropertyName("modrinthSlug")]
+        [ProtoMember(4)]
         public string? ModrinthSlug { get; set; }
     }
 
@@ -51,8 +50,8 @@ public class Program
             }
         }
 
-        File.WriteAllBytes(Path.Combine(workFolder.FullName, "mcmod.json"), Encoding.UTF8.GetBytes(JsonSerializer.Serialize(buffer)));
-
+        using var fs = new FileStream(Path.Combine(workFolder.FullName, "mcmod.buf"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+        Serializer.Serialize(fs, buffer);
     }
 
     public static List<(string? curseForgeSlug, string? modrinthSlug, string chineseName)> Parser(string line)

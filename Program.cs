@@ -1,5 +1,6 @@
 ﻿using ProtoBuf;
 using System.Globalization;
+using System.IO.Compression;
 
 public class Program
 {
@@ -51,7 +52,8 @@ public class Program
         }
 
         using var fs = new FileStream(Path.Combine(workFolder.FullName, "mcmod.buf"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-        Serializer.Serialize(fs, buffer);
+        using var compress = new GZipStream(fs, CompressionLevel.SmallestSize);
+        Serializer.Serialize(compress, buffer);
     }
 
     public static List<(string? curseForgeSlug, string? modrinthSlug, string chineseName)> Parser(string line)

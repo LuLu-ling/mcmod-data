@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.IO.Compression;
 
+namespace ModData;
+
 public class Program
 {
     [ProtoContract]
@@ -10,7 +12,7 @@ public class Program
         [ProtoMember(1)]
         public int WikiId { get; set; }
         [ProtoMember(2)]
-        public string ChineseName { get; set; }
+        public required string ChineseName { get; set; }
         [ProtoMember(3)]
         public string? CurseForgeSlug { get; set; }
         [ProtoMember(4)]
@@ -26,8 +28,7 @@ public class Program
         if (!File.Exists(fileName))
             throw new FileNotFoundException();
         var workFolder = Directory.GetParent(fileName);
-        if (workFolder == null)
-            throw new Exception("Can not get work folder");
+        ArgumentNullException.ThrowIfNull(workFolder, nameof(workFolder));
 
         using var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
         using var reader = new StreamReader(fileStream);
@@ -39,14 +40,14 @@ public class Program
         {
             wikiId++;
             if (string.IsNullOrWhiteSpace(line)) continue;
-            foreach (var item in Parser(line))
+            foreach (var (curseForgeSlug, modrinthSlug, chineseName) in Parser(line))
             {
                 buffer.Add(new CompDatabaseEntry
                 {
                     WikiId = wikiId,
-                    ChineseName = item.chineseName,
-                    CurseForgeSlug = item.curseForgeSlug,
-                    ModrinthSlug = item.modrinthSlug
+                    ChineseName = chineseName,
+                    CurseForgeSlug = curseForgeSlug,
+                    ModrinthSlug = modrinthSlug
                 });
             }
         }
@@ -76,20 +77,20 @@ public class Program
             string? modrinthSlug = null;
 
             // Match VB logic exactly
-            if (idPart.StartsWith("@"))
+            if (idPart.StartsWith('@'))
             {
                 // @modrinth
                 modrinthSlug = idPart.Substring(1);
                 curseForgeSlug = null;
             }
-            else if (idPart.EndsWith("@"))
+            else if (idPart.EndsWith('@'))
             {
                 // curseforge@
                 var slug = idPart.TrimEnd('@');
                 curseForgeSlug = slug;
                 modrinthSlug = slug;
             }
-            else if (idPart.Contains("@"))
+            else if (idPart.Contains('@'))
             {
                 // cf@mr
                 var split = idPart.Split('@', 2); // max 2 parts

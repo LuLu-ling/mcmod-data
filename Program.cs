@@ -1,4 +1,4 @@
-﻿using ProtoBuf;
+using ProtoBuf;
 using System.Globalization;
 using System.IO.Compression;
 
@@ -23,7 +23,7 @@ public class Program
     {
         Console.WriteLine("Please enter a file name");
         var fileName = Console.ReadLine()?.Trim().Trim('"');
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(fileName);
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(fileName, nameof(fileName));
         fileName = Path.GetFullPath(fileName);
         if (!File.Exists(fileName))
             throw new FileNotFoundException();

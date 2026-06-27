@@ -21,12 +21,20 @@ public class Program
 
     public static void Main(string[] args)
     {
-        Console.WriteLine("Please enter a file name");
-        var fileName = Console.ReadLine()?.Trim().Trim('"');
+        string fileName;
+        if (args.Length > 0)
+        {
+            fileName = args[0];
+        }
+        else
+        {
+            Console.WriteLine("Please enter a file name");
+            fileName = Console.ReadLine()?.Trim().Trim('"') ?? "";
+        }
         ArgumentNullException.ThrowIfNullOrWhiteSpace(fileName, nameof(fileName));
         fileName = Path.GetFullPath(fileName);
         if (!File.Exists(fileName))
-            throw new FileNotFoundException();
+            throw new FileNotFoundException($"File not found: {fileName}");
         var workFolder = Directory.GetParent(fileName);
         ArgumentNullException.ThrowIfNull(workFolder, nameof(workFolder));
 

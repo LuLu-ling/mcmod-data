@@ -25,7 +25,35 @@ jobs:
       - name: Generate mcmod.buf
         run: dotnet run -- moddata.txt
 
+      - name: Compare with latest release
+        id: compare
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NEW_SHA=$(sha256sum mcmod.buf | cut -d' ' -f1)
+          echo "new=$NEW_SHA" >> "$GITHUB_OUTPUT"
+
+          LATEST=$(gh release view --repo "${{ github.repository }}" --json tagName 2>/dev/null || true)
+          if [ -z "$LATEST" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          gh release download --repo "${{ github.repository }}" --pattern "mcmod.buf" -O mcmod-latest.buf 2>/dev/null || true
+          if [ ! -f mcmod-latest.buf ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          OLD_SHA=$(sha256sum mcmod-latest.buf | cut -d' ' -f1)
+          if [ "$NEW_SHA" = "$OLD_SHA" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Create release
+        if: steps.compare.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

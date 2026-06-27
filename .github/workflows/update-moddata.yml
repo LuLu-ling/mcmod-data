@@ -29,9 +29,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG_NAME="$(date -u +%Y%m%d%H%M)"
+          TAG_NAME="$(date -u +%Y-%m-%d-%H%M)"
+          REL_TITLE="$(date -u +%Y/%m/%d/%H:%M)"
           gh release create "$TAG_NAME" mcmod.buf \
             --repo "${{ github.repository }}" \
-            --title "$TAG_NAME" \
+            --title "$REL_TITLE" \
             --notes "Auto-generated from PCL moddata.txt" \
             --generate-notes

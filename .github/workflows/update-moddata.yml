@@ -62,5 +62,6 @@ jobs:
           gh release create "$TAG_NAME" mcmod.buf \
             --repo "${{ github.repository }}" \
             --title "$REL_TITLE" \
-            --notes "Auto-generated from PCL moddata.txt" \
-            --generate-notes
+            --notes "Auto-generated from PCL moddata.txt
+
+Source: https://github.com/Meloong-Git/PCL/blob/main/Plain%20Craft%20Launcher%202/Resources/moddata.txt"

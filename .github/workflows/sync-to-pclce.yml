@@ -19,7 +19,7 @@ jobs:
       - name: Checkout PCL-CE repo
         uses: actions/checkout@v4
         with:
-          repository: PCL-Community/PCL-CE
+          repository: LuLu-ling/PCL-CE
           ref: dev
           token: ${{ secrets.PAT_PCL_CE }}
           path: pcl-ce
@@ -52,7 +52,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_PCL_CE }}
         run: |
           PR_EXISTS=$(gh pr list \
-            --repo PCL-Community/PCL-CE \
+            --repo LuLu-ling/PCL-CE \
             --head "chore/upgrade-mcmod-data" \
             --state open \
             --json number \
@@ -80,7 +80,7 @@ jobs:
         run: |
           cd pcl-ce
           BRANCH="chore/upgrade-mcmod-data"
-          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/PCL-Community/PCL-CE.git"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/LuLu-ling/PCL-CE.git"
           git switch -c "$BRANCH"
           cp ../mcmod.buf "Plain Craft Launcher 2/Resources/mcmod.buf"
           git add "Plain Craft Launcher 2/Resources/mcmod.buf"
@@ -93,7 +93,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_PCL_CE }}
         run: |
           gh pr create \
-            --repo PCL-Community/PCL-CE \
+            --repo LuLu-ling/PCL-CE \
             --base dev \
             --head "chore/upgrade-mcmod-data" \
             --title "chore: upgrade mcmod.buf" \

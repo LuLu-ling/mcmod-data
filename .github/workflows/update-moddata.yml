@@ -69,11 +69,11 @@ jobs:
             --notes-file release-notes.md
           echo "tag_name=$TAG_NAME" >> "$GITHUB_OUTPUT"
 
-      - name: Checkout LuLu-ling/PCL-CE
+      - name: Checkout PCL-Community/PCL-CE
         if: steps.compare.outputs.changed == 'true'
         uses: actions/checkout@v4
         with:
-          repository: LuLu-ling/PCL-CE
+          repository: PCL-Community/PCL-CE
           ref: dev
           token: ${{ secrets.PAT_PCL_CE }}
           path: pcl-ce
@@ -103,7 +103,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_PCL_CE }}
         run: |
           PR_EXISTS=$(gh pr list \
-            --repo LuLu-ling/PCL-CE \
+            --repo PCL-Community/PCL-CE \
             --head "chore/upgrade-mcmod-data" \
             --state open \
             --json number \
@@ -131,7 +131,7 @@ jobs:
         run: |
           cd pcl-ce
           BRANCH="chore/upgrade-mcmod-data"
-          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/LuLu-ling/PCL-CE.git"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/PCL-Community/PCL-CE.git"
           git config user.name "LuLu-ling"
           git config user.email "LuLu-ling@outlook.com"
           git switch -c "$BRANCH"
@@ -146,7 +146,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_PCL_CE }}
         run: |
           gh pr create \
-            --repo LuLu-ling/PCL-CE \
+            --repo PCL-Community/PCL-CE \
             --base dev \
             --head "chore/upgrade-mcmod-data" \
             --title "chore: upgrade mcmod.buf" \

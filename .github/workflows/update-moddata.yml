@@ -132,6 +132,8 @@ jobs:
           cd pcl-ce
           BRANCH="chore/upgrade-mcmod-data"
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/LuLu-ling/PCL-CE.git"
+          git config user.name "LuLu-ling"
+          git config user.email "LuLu-ling@outlook.com"
           git switch -c "$BRANCH"
           cp ../mcmod.buf "Plain Craft Launcher 2/Resources/mcmod.buf"
           git add "Plain Craft Launcher 2/Resources/mcmod.buf"

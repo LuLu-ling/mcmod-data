@@ -44,20 +44,25 @@ public class Program
         var buffer = new List<CompDatabaseEntry>();
         var wikiId = 0;
 
+        string? previousLine = null;
         while (reader.ReadLine() is { } line)
         {
-            wikiId++;
-            if (string.IsNullOrWhiteSpace(line)) continue;
-            foreach (var (curseForgeSlug, modrinthSlug, chineseName) in Parser(line))
+            if (previousLine is not null)
             {
-                buffer.Add(new CompDatabaseEntry
+                wikiId++;
+                if (string.IsNullOrWhiteSpace(previousLine)) { previousLine = line; continue; }
+                foreach (var (curseForgeSlug, modrinthSlug, chineseName) in Parser(previousLine))
                 {
-                    WikiId = wikiId,
-                    ChineseName = chineseName,
-                    CurseForgeSlug = curseForgeSlug,
-                    ModrinthSlug = modrinthSlug
-                });
+                    buffer.Add(new CompDatabaseEntry
+                    {
+                        WikiId = wikiId,
+                        ChineseName = chineseName,
+                        CurseForgeSlug = curseForgeSlug,
+                        ModrinthSlug = modrinthSlug
+                    });
+                }
             }
+            previousLine = line;
         }
 
         using var fs = new FileStream(Path.Combine(workFolder.FullName, "mcmod.buf"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read);

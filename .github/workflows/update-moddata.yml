@@ -18,9 +18,9 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Download PCL moddata.txt
+      - name: Download PCL WikiEntries.txt
         run: |
-          curl -sL "https://raw.githubusercontent.com/Meloong-Git/PCL/main/Plain%20Craft%20Launcher%202/Resources/moddata.txt" -o moddata.txt
+          curl -sL "https://raw.githubusercontent.com/Meloong-Git/PCL/main/PCLCS/Resource/WikiEntries.txt" -o moddata.txt
 
       - name: Generate mcmod.buf
         run: dotnet run -- moddata.txt
@@ -60,9 +60,9 @@ jobs:
         run: |
           TAG_NAME="$(TZ=Asia/Shanghai date +%Y-%m-%d-%H%M)"
           REL_TITLE="$(TZ=Asia/Shanghai date +%Y/%m/%d/%H:%M)"
-          echo 'Auto-generated from PCL moddata.txt' > release-notes.md
+          echo 'Auto-generated from PCL WikiEntries.txt' > release-notes.md
           echo '' >> release-notes.md
-          echo 'Source: https://github.com/Meloong-Git/PCL/blob/main/Plain%20Craft%20Launcher%202/Resources/moddata.txt' >> release-notes.md
+          echo 'Source: https://github.com/Meloong-Git/PCL/blob/main/PCLCS/Resource/WikiEntries.txt' >> release-notes.md
           gh release create "$TAG_NAME" mcmod.buf \
             --repo "${{ github.repository }}" \
             --title "$REL_TITLE" \

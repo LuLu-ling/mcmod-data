@@ -104,7 +104,7 @@ jobs:
         run: |
           PR_EXISTS=$(gh pr list \
             --repo PCL-Community/PCL-CE \
-            --head "chore/upgrade-mcmod-data" \
+            --head "chore/update-mcmod-data" \
             --state open \
             --json number \
             --jq 'length')
@@ -130,14 +130,14 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_PCL_CE }}
         run: |
           cd pcl-ce
-          BRANCH="chore/upgrade-mcmod-data"
+          BRANCH="chore/update-mcmod-data"
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/PCL-Community/PCL-CE.git"
           git config user.name "LuLu-ling"
           git config user.email "LuLu-ling@outlook.com"
           git switch -c "$BRANCH"
           cp ../mcmod.buf "Plain Craft Launcher 2/Resources/mcmod.buf"
           git add "Plain Craft Launcher 2/Resources/mcmod.buf"
-          git commit -S -m "chore: upgrade mcmod.buf"
+          git commit -S -m "chore: update mcmod.buf"
           git push origin "$BRANCH"
 
       - name: Create Pull Request
@@ -148,6 +148,6 @@ jobs:
           gh pr create \
             --repo PCL-Community/PCL-CE \
             --base dev \
-            --head "chore/upgrade-mcmod-data" \
-            --title "chore: upgrade mcmod.buf" \
+            --head "chore/update-mcmod-data" \
+            --title "chore: update mcmod.buf" \
             --body "Auto-generated from [${{ github.repository }}](https://github.com/${{ github.repository }}) release [${{ steps.create-release.outputs.tag_name }}](https://github.com/${{ github.repository }}/releases/tag/${{ steps.create-release.outputs.tag_name }})."
